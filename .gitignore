@@ -1,0 +1,4 @@
+node_modules/
+.github-auth.json
+.github-ca-cache.pem
+*.tmp

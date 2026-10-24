@@ -1,0 +1,9 @@
+# dsh-gitdeck — bundle 补丁层
+#
+# 把本包装进 profile 时，会在 `dsh.profile.bundles` 尾部追加一项；这份补丁
+# 作为该 bundle 的层被应用。下面这行把包的主入口（lib/host.js，普通 Cordis
+# 插件）挂进宿主；因为 package.json 里声明了 `dsh.client`，Web 端会同时把
+# `./client`（lib/ui/index.js）作为浏览器半边加载。
+- insert:
+    - id: dsh-gitdeck
+      name: dsh-gitdeck

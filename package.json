@@ -1,0 +1,71 @@
+{
+  "name": "dsh-gitdeck",
+  "version": "0.1.1",
+  "description": "Git 操作台：在 DSH 里连接你的 GitHub 账号，让 AI 以你的身份建仓库、传文件、读 PR、查 Actions。OAuth 设备流与 Token 两种接法，只读模式与调用留痕开箱可用。",
+  "type": "module",
+  "main": "lib/host.js",
+  "exports": {
+    ".": "./lib/host.js",
+    "./client": "./lib/ui/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE",
+    "tests"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ],
+      "platform": "web"
+    }
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "cordis",
+    "plugin",
+    "github",
+    "github-api",
+    "oauth",
+    "device-flow",
+    "pat"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.18.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hulibuld/dsh-gitdeck.git"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    }
+  },
+  "author": {
+    "name": "钱禹舟",
+    "url": "https://github.com/hulibuld"
+  },
+  "homepage": "https://github.com/hulibuld/dsh-gitdeck#readme",
+  "bugs": {
+    "url": "https://github.com/hulibuld/dsh-gitdeck/issues"
+  },
+  "scripts": {
+    "test": "node tests/smoke.mjs && node tests/client.mjs"
+  }
+}
