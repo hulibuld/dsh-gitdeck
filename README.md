@@ -1,57 +1,64 @@
 # dsh-gitdeck
 
-在 DeepSeek Harness 里接上你的 GitHub 账号：对话框左下角点「Git」，授权一次，之后让 AI 以你的身份建仓库、传文件、改代码、提 issue、开 PR、读 Actions 日志。
+[![npm](https://img.shields.io/npm/v/dsh-gitdeck)](https://www.npmjs.com/package/dsh-gitdeck)
+[![月下载](https://img.shields.io/npm/dm/dsh-gitdeck)](https://www.npmjs.com/package/dsh-gitdeck)
+[![DSH](https://img.shields.io/badge/DSH-0.2.x-blue)](https://github.com/hulibuld/dsh-gitdeck)
+[![License](https://img.shields.io/npm/l/dsh-gitdeck)](LICENSE)
 
-令牌只存在你这台机器上（`~/.dsh/.dsh-gitdeck/auth.json`，权限 0600），不会进上下文、不会进仓库、不会出现在任何日志里。
+`dsh plugin --profile desktop add dsh-gitdeck` · [装不上就开个 issue](https://github.com/hulibuld/dsh-gitdeck/issues/new/choose)
+
+在 DeepSeek 里连自己的 GitHub。输入框左下角点 Git，授权一次，之后就能让 AI 以你的身份建仓库、传文件、改代码、提 issue、开 PR、看 Actions 日志。
+
+令牌只放本机 `~/.dsh/.dsh-gitdeck/auth.json`，权限 0600。不进上下文，不进仓库，不进日志。
 
 ## 装
 
-```bash
-dsh plugin --profile desktop add link:/path/to/dsh-gitdeck
+```
+dsh plugin --profile desktop add dsh-gitdeck
 ```
 
-或者发到 npm 之后直接 `npm i -g` 到 profile（市场里搜 `dsh-gitdeck`）。装完重启 DSH，输入框左下角多一个「Git」按钮。
+装完重启 DSH。插件不走热重载。重启后左下角多个 Git。
+
+从源码装的话，把包名换成你 clone 下来的目录，前面加 `link:`。
 
 ## 连
 
-两条路，任选一条：
+OAuth 设备流。GitHub 的 Settings → Developer settings → OAuth Apps → New OAuth App，回调地址填 `http://127.0.0.1/`。建完复制 Client ID 粘进面板，点开始连接。浏览器会开，输入面板上那 8 位码，Authorize，回 DSH，面板自己变成已连接。
 
-**A. OAuth 设备流（推荐）**
-
-1. GitHub → Settings → Developer settings → OAuth Apps → New OAuth App
-2. 名字随便填，回调地址填 `http://127.0.0.1/`
-3. 复制 Client ID，粘进面板，点「开始连接」
-4. 浏览器会自动打开，输入面板上的 8 位码，点 Authorize
-5. 回到 DSH，面板自己变成「已连接 @你的用户名」
-
-**B. 粘贴 Token**
-
-fine-grained token 更安全：只勾要用的仓库和权限（Contents 读写、Issues、Pull requests）。
+不想建 OAuth App 就粘 token。fine-grained 的就行，勾上 Contents 读写、Issues、Pull requests。
 
 ## 用
 
-连上之后不用记 API，直接说事：
+连上之后不用记 API，直接说话。
 
-- 「把桌面那个文件夹建成私有仓库」
-- 「看看这个 PR 的 CI 为什么挂」
-- 「给这个 issue 打上 bug 标签」
-- 「把 README 里那段的错字改掉，提个 PR」
-
-AI 通过 `github_api` 工具发请求，路径、查询串、中文文件名都能处理。
+「把桌面那个文件夹建成私有仓库」「看看这个 PR 的 CI 为什么挂」「给这个 issue 打个 bug 标签」「README 里那段错字改掉，提个 PR」。
 
 ## 三道保险
 
-| 保险 | 说明 |
-| --- | --- |
-| 只读模式 | 面板「设置」里打开，只放行 GET，写操作一律 403 |
-| 调用留痕 | 面板「记录」里能看到每次调用的方法、路径、状态码、耗时（重启清空） |
-| 随时断开 | 面板「断开连接」立刻作废；也可以去 GitHub → Settings → Applications 撤销授权 |
+只读模式。设置里打开，只放行 GET，写操作一律 403。
+
+调用留痕。记录页签能看到每次调用的方法、路径、状态码、耗时。重启清空。
+
+随时断开。面板点断开立刻作废，也可以去 GitHub 的 Settings → Applications 撤销授权。
 
 ## 排障
 
-- **连不上授权页**：`github.com` 的 443 有时被墙，但 `api.github.com` 通。设备流需要访问 github.com，先确认浏览器能打开。
-- **要走代理**：插件配置里设 `proxy: "http://127.0.0.1:7890"`，或设 `proxy: "direct"` 强制直连。
-- **状态不对**：面板关掉再打开，会重新读一次状态；「重新验证」会拿当前令牌打一次 `/user`。
+连不上授权页，多半是 github.com 的 443 不通。设备流要访问 github.com，先在浏览器里试着打开。
+
+要走代理，配置里写 `proxy` 填地址，或者填 `direct` 强制直连。
+
+状态看着不对，面板关掉再打开会重新读一次。还不对点重新验证，拿当前令牌打一次 `/user`。
+
+## 已知问题与修复记录
+
+0.1.0 到 0.1.1 之间没有独立提交，那一段压成了一条，所以这表按版本记，能确认的才写。
+
+| 版本 | 日期 | 现象 | 原因 | 修复方式 |
+| --- | --- | --- | --- | --- |
+| 0.1.1 | 2026-10-24 | 未记录 | 未记录 | 未记录 |
+| 0.1.0 | 2026-10-24 | 首个版本 | — | — |
+
+以后每修一次加一行，写清版本、日期、现象、原因、修法。原因写不出就写未记录，别猜。
 
 ## License
 
